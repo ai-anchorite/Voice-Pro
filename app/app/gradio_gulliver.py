@@ -122,7 +122,7 @@ class GradioGulliver:
             else:
                 return None, source_audio, self.fm.get_all_files()
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] gradio_upload_source - Error transcribing file: {e}")
+            logger.warning(f"[gradio_gulliver.py] gradio_upload_source - Error transcribing file: {e}")
             gr.Warning(f'{e}')
             return None, None, None    
         
@@ -135,6 +135,9 @@ class GradioGulliver:
             uploaded_file = cmd_copy_file_to(mic_file, path_workspace_subfolder(mic_file))
         elif youtube_url and youtube_url.strip():
             youtube_file = self.downloader.yt_download(youtube_url, path_youtube_folder(), video_quality)
+            if youtube_file is None:
+                gr.Warning("YouTube download failed: could not resolve file path")
+                return False
             uploaded_file = cmd_copy_file_to(youtube_file, path_workspace_subfolder(youtube_file))
         else:
             return False
@@ -193,7 +196,7 @@ class GradioGulliver:
             else:
                 return None, source_audio, srt_string, self.fm.get_all_files()
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] gradio_upload_source - Error transcribing file: {e}")
+            logger.warning(f"[gradio_gulliver.py] gradio_upload_source - Error transcribing file: {e}")
             gr.Warning(f'{e}')
             return None, None, None, None    
 
@@ -292,7 +295,7 @@ class GradioGulliver:
             self.fm.set_translation(target_lang_code, translation_file)            
             return translation_file
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _translate_subtitle - error: {e}")
+            logger.warning(f"[gradio_gulliver.py] _translate_subtitle - error: {e}")
             gr.Warning(f'{e}')
             return None           
 
@@ -301,7 +304,7 @@ class GradioGulliver:
             translated = self.translator.translate_text(source_lang, target_lang, text)
             return translated   
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _translate_text - error: {e}")
+            logger.warning(f"[gradio_gulliver.py] _translate_text - error: {e}")
             gr.Warning(f'{e}')
             return None            
 
@@ -392,7 +395,7 @@ class GradioGulliver:
             else:
                 return None, mixed_audio_file, 
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _edge_tts_text - Error : {e}")
+            logger.warning(f"[gradio_gulliver.py] _edge_tts_text - Error : {e}")
             gr.Warning(f'{e}')
             return None, None    
 
@@ -432,7 +435,7 @@ class GradioGulliver:
             else:
                 return None, mixed_audio_file
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _edge_tts_subtitle - Error : {e}")
+            logger.warning(f"[gradio_gulliver.py] _edge_tts_subtitle - Error : {e}")
             gr.Warning(f'{e}')
             return None, None 
 
@@ -510,7 +513,7 @@ class GradioGulliver:
             else:
                 return None, mixed_audio_file
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _f5_tts_single - Error : {e}")
+            logger.warning(f"[gradio_gulliver.py] _f5_tts_single - Error : {e}")
             gr.Warning(f'{e}')
             return None, None    
     
@@ -579,7 +582,7 @@ class GradioGulliver:
             else:
                 return None, mixed_audio_file
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _cosy_tts_single - Error : {e}")
+            logger.warning(f"[gradio_gulliver.py] _cosy_tts_single - Error : {e}")
             gr.Warning(f'{e}')
             return None, None    
        
@@ -658,7 +661,7 @@ class GradioGulliver:
             else:
                 return None, mixed_audio_file, 
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _kokoro_tts_text - Error : {e}")
+            logger.warning(f"[gradio_gulliver.py] _kokoro_tts_text - Error : {e}")
             gr.Warning(f'{e}')
             return None, None    
 
@@ -698,6 +701,6 @@ class GradioGulliver:
             else:
                 return None, mixed_audio_file
         except Exception as e:
-            logger.error(f"[gradio_gulliver.py] _kokoro_tts_subtitle - Error : {e}")
+            logger.warning(f"[gradio_gulliver.py] _kokoro_tts_subtitle - Error : {e}")
             gr.Warning(f'{e}')
             return None, None         

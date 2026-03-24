@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+import time
 from pathlib import Path
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,19 +15,31 @@ from app.abus_genuine import genuine_init
 from app.abus_app_voice import create_ui
 from app.abus_path import path_workspace_folder, path_gradio_folder
 
+
+def download_with_retry(file_type, level=0, max_retries=3):
+    for attempt in range(1, max_retries + 1):
+        try:
+            AbusHuggingFace.hf_download_models(file_type=file_type, level=level)
+            return
+        except Exception as e:
+            if attempt < max_retries:
+                wait = 5 * attempt
+                print(f"Download '{file_type}' failed (attempt {attempt}/{max_retries}): {e}", flush=True)
+                print(f"Retrying in {wait}s...", flush=True)
+                time.sleep(wait)
+            else:
+                print(f"Download '{file_type}' failed after {max_retries} attempts: {e}", flush=True)
+                print(f"Skipping '{file_type}' - it will be downloaded on next start.", flush=True)
+
+
 # ABUS - start voice
 genuine_init()
 AbusHuggingFace.initialize(app_name="voice")
 
-# AbusHuggingFace.hf_download_models(file_type='mdxnet-model', level=0)
-AbusHuggingFace.hf_download_models(file_type='demucs', level=0)
-# AbusHuggingFace.hf_download_models(file_type='f5-tts', level=0)
-# AbusHuggingFace.hf_download_models(file_type='vocos-mel-24khz', level=0)
-# AbusHuggingFace.hf_download_models(file_type='rvc-model', level=0)
-# AbusHuggingFace.hf_download_models(file_type='rvc-voice', level=0)
-AbusHuggingFace.hf_download_models(file_type='edge-tts', level=0)
-AbusHuggingFace.hf_download_models(file_type='kokoro', level=0)
-AbusHuggingFace.hf_download_models(file_type='cosyvoice', level=0)
+download_with_retry('demucs')
+download_with_retry('edge-tts')
+download_with_retry('kokoro')
+download_with_retry('cosyvoice')
 
 path_workspace_folder()
 path_gradio_folder()

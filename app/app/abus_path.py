@@ -28,6 +28,12 @@ def sanitize_filename(filename):
         invalid_chars = r'[/\x00]'
     
     filename = re.sub(invalid_chars, '', filename)
+    
+    # macOS/Linux에서 금지된 파일명 (., .. 등)
+    if filename in ['.', '..']:
+        filename = '_' + filename
+    
+    return filename
 
 
 def sanitize_path_component(name):
@@ -44,12 +50,6 @@ def sanitize_path_component(name):
     safe = ''.join(result).strip()
     safe = re.sub(r'\s+', ' ', safe)
     return safe if safe else 'voice'
-    
-    # macOS/Linux에서 금지된 파일명 (., .. 등)
-    if filename in ['.', '..']:
-        filename = '_' + filename
-    
-    return filename
 
 def shorten_string(title, max_length = 64):
     title = title.strip()
@@ -316,7 +316,7 @@ def cmd_copy_files(from_files: list, dest_directory: str) -> list:
             logger.debug(f'[abus_path.py] cmd_copy_files: {from_file} -> {to_file}')
             to_files.append(to_file)
         except Exception as e:
-            logger.error(f"[abus_path.py] cmd_copy_files - Error copying {from_file}: {e}")
+            logger.warning(f"[abus_path.py] cmd_copy_files - Error copying {from_file}: {e}")
             # 오류가 발생해도 계속 진행
             to_file = os.path.join(dest_directory, from_file_name)
             to_files.append(to_file)
@@ -333,7 +333,7 @@ def cmd_copy_file_to(from_file: str, to_directory: str):
         shutil.copy(from_file, to_file)
         logger.debug(f'[abus_path.py] cmd_copy_file_to: {from_file} -> {to_file}')
     except Exception as e:
-        logger.error(f"[abus_path.py] cmd_copy_file_to - Error: {e}")
+        logger.warning(f"[abus_path.py] cmd_copy_file_to - Error: {e}")
     return to_file  
         
 def cmd_copy_file(from_file: str, to_file: str):
@@ -341,7 +341,7 @@ def cmd_copy_file(from_file: str, to_file: str):
         shutil.copy(from_file, to_file)
         logger.debug(f'[abus_path.py] cmd_copy_file: {from_file} -> {to_file}')
     except Exception as e:
-        logger.error(f"[abus_path.py] cmd_copy_file - Error: {e}")
+        logger.warning(f"[abus_path.py] cmd_copy_file - Error: {e}")
     return to_file          
         
 def cmd_move_file_to(from_file: str, to_directory: str):
@@ -360,7 +360,7 @@ def cmd_rename_file(original_path: str, new_path: str):
     try:
         shutil.move(original_path, new_path)
     except Exception as e:
-        logger.error(f"[abus_path.py] cmd_rename_file - Error: {e}")    
+        logger.warning(f"[abus_path.py] cmd_rename_file - Error: {e}")    
     
     return new_path
 
@@ -380,7 +380,7 @@ def cmd_safe_rename(original_path, new_path):
    
 def cmd_delete_file(target_file):
     if target_file is None:
-        logger.error("[abus_path.py] cmd_delete_file - target_file is None")
+        logger.warning("[abus_path.py] cmd_delete_file - target_file is None")
         return "Target file is None"
         
     try:
@@ -388,13 +388,13 @@ def cmd_delete_file(target_file):
         logger.debug(f'[abus_path.py] cmd_delete_file: {target_file} deleted')
         return None  # Deletion successful
     except FileNotFoundError:
-        logger.error(f"[abus_path.py] cmd_delete_file - File not found: {target_file}")
+        logger.warning(f"[abus_path.py] cmd_delete_file - File not found: {target_file}")
         return f"File not found: {target_file}"
     except PermissionError:
-        logger.error(f"[abus_path.py] cmd_delete_file - Permission denied: {target_file}")
+        logger.warning(f"[abus_path.py] cmd_delete_file - Permission denied: {target_file}")
         return f"Permission denied to delete: {target_file}"
     except Exception as e:
-        logger.error(f"[abus_path.py] cmd_delete_file - Error: {e}")
+        logger.warning(f"[abus_path.py] cmd_delete_file - Error: {e}")
         return f"Error during file deletion: {e}"
         
 def cmd_open_explorer(path='.'):
@@ -447,10 +447,10 @@ def cmd_select_folder(default_path='.'):
         
         return folder_path or default_path
     except subprocess.CalledProcessError as e:
-        logger.error(f"[abus_path.py] cmd_select_folder - Command failed: {e}")
+        logger.warning(f"[abus_path.py] cmd_select_folder - Command failed: {e}")
         return default_path
     except Exception as e:
-        logger.error(f"[abus_path.py] cmd_select_folder - Error: {e}")
+        logger.warning(f"[abus_path.py] cmd_select_folder - Error: {e}")
         sys.stderr.flush()
         return default_path
         

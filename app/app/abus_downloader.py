@@ -35,9 +35,9 @@ class YoutubeDownloader:
         try:
             shortened_path = path_shorten(path)
             cmd_rename_file(path, shortened_path)
-        except ValueError as e:
+        except Exception as e:
             shortened_path = path
-            logger.error(f"validate_path - Error: {e}")    
+            logger.warning(f"validate_path - Error: {e}")    
 
         return shortened_path
         
@@ -55,7 +55,7 @@ class YoutubeDownloader:
             if d["status"] == "downloading" and total_bytes > 0:
                 self.progress(int(downloaded_bytes / total_bytes * 100) / 100.0, desc="YouTube Downloader")
         except Exception as e:
-            logger.error(f"[abus_downloader.py] dl_progress_hook - An error occurred: {e}")
+            logger.warning(f"[abus_downloader.py] dl_progress_hook - An error occurred: {e}")
 
    
     def yt_download(self, url: str, download_folder: str, quality: str = "good", maxDuration: int = None):       
