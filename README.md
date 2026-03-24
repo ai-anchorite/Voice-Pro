@@ -1,25 +1,9 @@
 # Voice-Pro for Pinokio
 
-[Voice-Pro](https://github.com/abus-aikorea/voice-pro) repacked for [Pinokio](https://pinokio.computer) — 1-click install, no conda required.
+[Voice-Pro](https://github.com/abus-aikorea/voice-pro) repacked for [Pinokio](https://pinokio.co) — 1-click install
 
 This is a repackaged version of ABUS's Voice-Pro AI voice app, modified to run cleanly through Pinokio's launcher system. The original project's conda-based installer has been replaced with Pinokio scripts that handle virtual environments, dependency installation, and GPU setup automatically.
 
-## What changed from the original
-
-- Removed conda-based 1-click installer (`one_click.py`, `start.bat`, `configure.bat`, etc.)
-- Created Pinokio launcher scripts (`install.js`, `start.js`, `reset.js`, `update.js`, `pinokio.js`)
-- Custom `requirements.txt` with cleaned dependencies (PyTorch handled separately via `torch.js`, cuDNN 8 via conda)
-- Removed `modelscope` dependency from CosyVoice (model downloads handled by the app's own HF downloader)
-- Made `WeTextProcessing`/`pynini` optional in CosyVoice frontend (not needed when using `text_frontend=False`)
-- Stripped Matcha-TTS `utils/__init__.py` to avoid pulling in training-only deps (hydra, lightning, gdown, omegaconf)
-- Fixed TTS audio pipeline across all engines (Kokoro, Edge, F5, Azure, CosyVoice) — intermediate wav + pydub trim/convert instead of broken ffmpeg/soundfile chain
-- Fixed emoji characters in filenames crashing `os.system()`/`cmd.exe`
-- Fixed ffmpeg mp3 encoding (conda's ffmpeg uses `mp3_mf`, not `libmp3lame`)
-- Various `logger.error` → `logger.warning` to prevent Pinokio shell auto-kill
-
-## Install
-
-Download through Pinokio or clone this repo into your Pinokio `api` folder and run the install script.
 
 ## Credits
 

@@ -1,0 +1,71 @@
+structlog
+py-cpuinfo==9.0.0
+wget
+# for Whisper
+openai-whisper
+faster-whisper==1.1.0
+whisperx==3.3.1
+whisper-timestamped==1.15.8
+matplotlib
+ffmpeg-python==0.2.0
+# for Demucs
+demucs==4.0.1
+invisible-watermark
+fonts
+font-roboto
+# gradio
+gradio==5.14.0
+numpy<2
+pydantic==2.9.1
+yt-dlp==2025.11.12
+browser_cookie3
+json5
+more_itertools
+pyyaml
+pandas==1.5.0
+huggingface-hub==0.27.1
+cached_path==1.6.7
+# one-click
+tqdm
+markdown
+rich
+ntplib
+# tts
+edge-tts
+python-iso639
+deep-translator
+pysubs2
+lingua-language-detector
+# live
+soundcard
+soundfile
+websockets
+websocket-client
+kaldialign
+librosa==0.10.1
+jiwer
+evaluate
+azure-ai-translation-text==1.0.0b1
+azure-cognitiveservices-speech
+uuid
+#
+pydub==0.25.1
+pyworld==0.3.4
+f5-tts==1.0.8
+# kokoro
+kokoro
+misaki[en]
+misaki[ja]
+misaki[zh]
+# spaCy
+spacy==3.7.5
+# etc
+onnxruntime-gpu==1.19.2
+python-dotenv
+inflect==7.3.1
+# cosyvoice
+hyperpyyaml
+regex
+conformer
+diffusers
+einops
